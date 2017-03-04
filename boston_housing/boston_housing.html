@@ -11900,22 +11900,13 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Minimum price of the data</span>
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-
-<span class="c1"># TODO: Maximum price of the data</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 <span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-
-<span class="c1"># TODO: Mean price of the data</span>
 <span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-
-<span class="c1"># TODO: Median price of the data</span>
 <span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-
-<span class="c1"># TODO: Standard deviation of prices of the data</span>
 <span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># Show the calculated statistics</span>
@@ -13271,7 +13262,8 @@ ww0gMzMzMzPrGP8Fq02m9ZEd9fwAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong> I choose the second graph, with max_depth = 3.</p>
-<p>Both curves are converging to a value between 0.8 and 0.7. The training curve is decreasing as the number of training points increase, and the test curve is increasing as the number of training points increase. Since both curves seems to be converging to a number, I would expect that adding more training points would get both curves closer to this convergence point.</p>
+<p>Both curves are converging to a value higher than 0.7. The training curve is decreasing as the number of training points increase, and the test curve is increasing as the number of training points increase.</p>
+<p>Both curves seem to be converging to a number as the number of training points increase, however their rate of change is very small after 300 points. Hence it is not clear that adding more training points would benefit the model.</p>
 
 </div>
 </div>
@@ -13835,8 +13827,8 @@ We can see that on the graph by analyzing the training and validation score. Wit
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>When deciding the split between test and training data, you would like to maximize the amount of data you want to test your model with, but you would also like to maximize the amount of data to train your model. K-Fold cross-validation helps with that because it allows you to train and test your model with all your data, by partitioning it into K parts and repeatedly applying cross validation using a different partition to train and test your model. This allows you to get an average score for your model trained and tested using all the available data.
-It also helps by automating the tuning of hyperparameters when using alongside grid search.</p>
+<p><strong>Answer: </strong>k-fold cross-validation allow us to train and validate the model using all data instead of validating it against just one fixed testing set. With it, we split the dataset into k subsets. Then we select one subset as the testing data and use the other k - 1 subsets to train the model. We repeat this process k times (k folds), using a different subset for testing each time. Each subset is selected as the testing subset once. During this process, we collect the resulting score for each fold, and then later we take their mean as the resulting score of the process.</p>
+<p>With the grid search technique, our goal is to find the hyperparameters of the model that generalizes well the problem; that is, that have low bias without overfitting. By using it alongside k-fold cross-validation, we make sure we test every combination of hyperparameters of the model against all data. Without it, grid search may find a combination of hyperparameters that overfit the model to the fixed training and testing subsets and thus fail to generalise the problem to new data.</p>
 
 </div>
 </div>
@@ -13872,7 +13864,7 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
@@ -13889,7 +13881,7 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 
     <span class="n">regressor</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">()</span>
 
-    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
 
     <span class="n">scoring_fnc</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">performance_metric</span><span class="p">)</span>
 
@@ -13930,7 +13922,7 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Fit the training data to the model using grid search</span>
@@ -13952,7 +13944,7 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Parameter &#39;max_depth&#39; is 10 for the optimal model.
+<pre>Parameter &#39;max_depth&#39; is 5 for the optimal model.
 </pre>
 </div>
 </div>
@@ -13966,7 +13958,9 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>The optimal model have max depth of 10. This differs from my guess from question 6.</p>
+<p><strong>Answer: </strong>The optimal model have max depth of 5. This differs from my guess from question 6 (max depth of 3), however not by much.</p>
+<p>In retrospect, this difference makes sense when looking at the complexity curve. On it, the validation score increases after a max_depth of 3 and only starts to decrease after a max_depth higher than 5.
+If we had plotted the learning curve for a max_depth of 5, I would probably had selected it.</p>
 
 </div>
 </div>
@@ -14015,7 +14009,7 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Produce a matrix for client data</span>
@@ -14041,9 +14035,9 @@ It also helps by automating the tuning of hyperparameters when using alongside g
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted selling price for Client 1&#39;s home: $397,950.00
-Predicted selling price for Client 2&#39;s home: $302,400.00
-Predicted selling price for Client 3&#39;s home: $953,400.00
+<pre>Predicted selling price for Client 1&#39;s home: $419,700.00
+Predicted selling price for Client 2&#39;s home: $287,100.00
+Predicted selling price for Client 3&#39;s home: $927,500.00
 </pre>
 </div>
 </div>
@@ -14074,7 +14068,7 @@ Predicted selling price for Client 3&#39;s home: $953,400.00
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">vs</span><span class="o">.</span><span class="n">PredictTrials</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">fit_model</span><span class="p">,</span> <span class="n">client_data</span><span class="p">)</span>
@@ -14092,18 +14086,18 @@ Predicted selling price for Client 3&#39;s home: $953,400.00
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Trial 1: $407,400.00
-Trial 2: $397,950.00
-Trial 3: $405,825.00
-Trial 4: $367,500.00
-Trial 5: $396,480.00
-Trial 6: $435,600.00
-Trial 7: $367,500.00
-Trial 8: $437,220.00
-Trial 9: $367,500.00
-Trial 10: $407,400.00
+<pre>Trial 1: $411,000.00
+Trial 2: $419,700.00
+Trial 3: $430,942.11
+Trial 4: $394,523.68
+Trial 5: $418,377.27
+Trial 6: $383,896.15
+Trial 7: $390,250.00
+Trial 8: $383,700.00
+Trial 9: $351,577.61
+Trial 10: $379,125.00
 
-Range in prices: $69,720.00
+Range in prices: $79,364.49
 </pre>
 </div>
 </div>
